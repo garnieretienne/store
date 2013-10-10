@@ -6,8 +6,8 @@
 set -e
 
 # Where the namespace, keys and values are stored
-# Default is `/tmp/store`
-STORE_DIR=${STORE_DIR:-'/tmp/store'}
+# Default is `~/store`
+STORE_DIR=${STORE_DIR:-$HOME/store}
 
 path="${STORE_DIR}/${2}"
 case "$1" in

@@ -4,14 +4,14 @@ Store
 Simple key/value store with namespace in bash.
 It store its data using the file system. 
 Namespaces are folder, keys are files and value are the content of the file.
-The default store folder is `/tmp/store` but can be changed using the env var `STORE_DIR`.
+The default store folder is `~/store` but can be changed using the env var `STORE_DIR`.
 
 Usage
 -----
 
 ```
 Simple key/value store with namespace in bash.
-The default store folder is `/tmp/store` but can be changed using the env var `STORE_DIR`.
+The default store folder is `~/store` but can be changed using the env var `STORE_DIR`.
 
 Usage: 
   get NAMESPACE|KEY             # Get the value for an individual key or a complete namespace
