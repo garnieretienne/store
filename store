@@ -1,0 +1,80 @@
+#!/bin/bash
+# Simple bash key/value store with namespace
+# Use the file and folder to store the data
+# Namespace are contain wero or many key
+# A key can have a value
+set -e
+
+# Where the namespace, keys and values are stored
+# Default is `/tmp/store`
+STORE_DIR=${STORE_DIR:-'/tmp/store'}
+
+path="${STORE_DIR}/${2}"
+case "$1" in
+  
+  # Get a value from the store
+  get)
+    if [[ -f $path ]]; then
+      cat $path
+      exit 0
+    elif [[ -d $path ]]; then
+      for file in ${path}/*; do
+        key=$(basename $file)
+        value=$(cat $file)
+        if [[ -z $value ]]; then
+          echo $key
+        else
+          echo "${key}=${value}"
+        fi
+      done
+      exit 0
+    else
+      echo "not found" 1>&2
+      exit 1
+    fi
+    ;;
+
+  # Set a value in the store
+  set)
+    mkdir -p ${path%/*}
+    if [[ ! -d $path ]]; then
+      key=$(basename $2)
+      value=$3
+      echo $value > $path
+      if [[ -z $value ]]; then
+        echo $key
+      else
+        echo $value
+      fi
+      exit 0
+    else
+      echo "'${path}' is a namespace" 1>&2
+      exit 1
+    fi
+    ;;
+
+  # Delete a key from the store
+  delete)
+    if [[ -f $path ]]; then
+      rm $path
+      exit 0
+    elif [[ -d $path ]]; then
+      rm -rf $path
+      exit 0
+    else
+      echo "not found" 1>&2
+      exit 1
+    fi
+    ;;
+  *)
+    cat <<-'EOF'
+		Simple key/value store with namespace in bash.
+		The default store folder is `/tmp/store` but can be changed using the env var `STORE_DIR`.
+
+		Usage: 
+		  get NAMESPACE|KEY             # Get the value for an individual key or a complete namespace
+		  set [NAMESPACE/]KEY value     # Set the value for a key
+		  delete NAMESPACE|KEY          # Delete a key or a complete namespace
+		EOF
+    ;;
+esac
